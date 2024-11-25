@@ -60,20 +60,21 @@ if st.button('predict price'):
 	y_res = int(resolution.split('x')[1])
 	try:
 		ppi = (((x_res ** 2) + (y_res ** 2)) ** 0.5) / screen_size
+		querry = np.array([company, type, ram, gpu, weight, touchScreen, ips, ppi, cpu, hdd, ssd, os])
+
+		querry = querry.reshape(1, 12)
+		if weight <= 0 or screen_size <= 0:
+			st.title('Please Enter all the details correctly')
+		elif hdd == 0 and ssd == 0:
+			st.title('Please select at least one storage option (HDD or SSD).')
+		else:
+			st.title("The Predicted Price is: " + str(int(np.exp(pipe.predict(querry))[0])))
 	except ZeroDivisionError:
 		st.title("Screen Size cannot be zero. Please provide a valid value.")
-		ppi = 0 
+		ppi = 0
 
 	#ppi = (((x_res**2) + (y_res**2))**0.5)/screen_size
-	querry = np.array([company,type,ram,gpu,weight,touchScreen,ips,ppi,cpu,hdd,ssd,os])
 
-	querry = querry.reshape(1,12)
-	if weight <= 0 or screen_size <= 0:
-		st.title('Please Enter all the details correctly')
-	elif hdd==0 and ssd==0:
-		st.title('Please select at least one storage option (HDD or SSD).')
-	else:
-		st.title("The Predicted Price is: "+ str(int(np.exp(pipe.predict(querry))[0])))
 
 
 
